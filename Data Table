@@ -1,0 +1,60 @@
+########## Set Datatable heading#########
+   DataTable dataTable=new DataTable();
+   
+   //Under the page load event
+   private void Medicine_Load(object sender, System.EventArgs e)
+        {
+            dataTable.Columns.Add("here will be the name of column", typeof(string));
+            
+            dgvMedicine.DataSource = dataTable;
+        }
+        
+        
+######## Load data from fields to datatable ###########
+private void BtnAdd_Click(object sender, EventArgs e)
+        {
+            dataTable.Rows.Add(txtMedicineName.Text, txtPrice.Text, txtQty.Text);
+
+            dgvMedicine.DataSource = dataTable;
+        }
+        
+        
+####### Get list of data from datatable and store in Database########
+ private void BtnSaveAll_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                for (int i = 1; i <= dgvMedicine.RowCount; i++)
+                {
+                    var model = new MedicineModel
+                    {
+                        MedicineName = Convert.ToString(dgvMedicine.Rows[i].Cells[0].Value),
+                        Price = Convert.ToDecimal(dgvMedicine.Rows[i].Cells[1].Value),
+                        Qty = Convert.ToInt32(dgvMedicine.Rows[i].Cells[2].Value)
+                    };
+
+                    medicineService.AddMedicine(model);
+                }
+                
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+
+
+######## Load data from data table to fields #########
+private void DgvSavedMedicine_DoubleClick(object sender, EventArgs e)
+        {
+            txtIdU.Text = this.DgvSavedMedicine.CurrentRow.Cells[0].Value.ToString();
+            txtMedicineNameU.Text = this.DgvSavedMedicine.CurrentRow.Cells[1].Value.ToString();
+            txtPriceU.Text = this.DgvSavedMedicine.CurrentRow.Cells[2].Value.ToString();
+            txtQtyU.Text = this.DgvSavedMedicine.CurrentRow.Cells[3].Value.ToString();
+
+        }
+        
+        
+        
+        
